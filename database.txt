@@ -5,9 +5,10 @@ user
 - session_id VARCHAR(255) NOT NULL
 - name VARCHAR(255) NOT NULL
 
-messages
+message
 
-- user_id INT
-- message_txt TXT
+- id INT NOT NULL AUTO_INCREMENT
+- user_id INT NOT NULL
+- message_txt TEXT NOT NULL
 - message_time DATETIME NOT NULL
 -
