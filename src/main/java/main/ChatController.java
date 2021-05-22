@@ -7,6 +7,7 @@ import main.repos.UserRepository;
 import main.response.AddMessageResponse;
 import main.response.AuthResponse;
 import main.response.MessageResponse;
+import main.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,7 +67,7 @@ public class ChatController {
 
         Date time = new Date();
         Message message = new Message();
-        message.setSendTime(time);
+        message.setTime(time);
         message.setUser(user);
         message.setText(text);
         messageRepository.save(message);
@@ -77,6 +78,8 @@ public class ChatController {
         return response;
     }
 
+
+
     @GetMapping(path = "/api/messages")
     public HashMap<String, List> getMessages() {
         ArrayList<MessageResponse> messagesList =
@@ -86,13 +89,32 @@ public class ChatController {
             MessageResponse messageItem = new MessageResponse();
             messageItem.setName(message.getUser().getName());
             messageItem.setTime(
-                formatter.format(message.getSendTime())
+                formatter.format(message.getTime())
             );
             messageItem.setText(message.getText());
             messagesList.add(messageItem);
         }
         HashMap<String, List> response = new HashMap<>();
         response.put("messages", messagesList);
+        return response;
+    }
+
+
+    @GetMapping(path = "/api/users")
+    public HashMap<String, List> getUsers() {
+        ArrayList<UserResponse> usersList =
+                new ArrayList<>();
+        Iterable<User> users = userRepository.findAll();
+        for(User user: users) {
+            UserResponse userItem = new UserResponse();
+            userItem.setId(user.getId());
+            userItem.setName(user.getName());
+            usersList.add(userItem);
+        }
+
+        HashMap<String, List> response = new HashMap<>();
+
+        response.put("users", usersList);
         return response;
     }
 
